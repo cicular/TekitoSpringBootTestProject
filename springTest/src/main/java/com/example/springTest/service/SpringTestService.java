@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.springTest.dto.SearchElement;
 import com.example.springTest.mapper.ArticlesMapper;
 import com.example.springTest.mapper.ArticlesMapperExtends;
 import com.example.springTest.mapper.CommentsMapper;
@@ -47,8 +46,7 @@ public class SpringTestService {
 
     Logger logger = LoggerFactory.getLogger(SpringTestService.class);
     
-    public List<Articles> getArticles(String searchWordArticle, 
-        SearchElement se) throws Exception{
+    public List<Articles> getArticles(String searchWordArticle, boolean flg) throws Exception{
         String[] wordArray = searchWordArticle.split("　");
 
         List<Articles> articleListTitle = new ArrayList<Articles>();
@@ -74,11 +72,11 @@ public class SpringTestService {
             //     }
             // }
 
-            if (!se.isOtherSiteFlg()){
+            if (!flg){
                 criteria.andRemarksIsNull();
             }
             articleListTitle = articlesMapper.selectByExample(articleExample);
-            System.out.println("articleListTitleのサイズ:" + articleListTitle.size());
+            // System.out.println("articleListTitleのサイズ:" + articleListTitle.size());
 
             articleExample.clear();
             criteria = articleExample.createCriteria();
@@ -86,11 +84,11 @@ public class SpringTestService {
                 criteria.andArticleContentLike("%" + word + "%");
             }
 
-            if (!se.isOtherSiteFlg()){
+            if (!flg){
                 criteria.andRemarksIsNull();
             }
             articleListContent = articlesMapper.selectByExample(articleExample);
-            System.out.println("articleListContentのサイズ:" + articleListContent.size());
+            // System.out.println("articleListContentのサイズ:" + articleListContent.size());
     
         }catch(Exception e){
             e.printStackTrace();
@@ -106,7 +104,7 @@ public class SpringTestService {
 
         // result.forEach(System.out::println);
 
-        if (!se.isSortFlg()){
+        if (!flg){
             Collections.sort(resultList, Comparator.comparing(Articles::getPostDate));
         }else{
             Collections.sort(resultList, Comparator.comparing(Articles::getPostDate).reversed());
