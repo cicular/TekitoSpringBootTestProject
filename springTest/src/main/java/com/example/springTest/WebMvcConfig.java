@@ -18,5 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 最大値のデフォルトは20
         resolver.setMaxPageSize(100);
         argumentResolvers.add(resolver);
+
+        System.out.println("config");
     }
 }

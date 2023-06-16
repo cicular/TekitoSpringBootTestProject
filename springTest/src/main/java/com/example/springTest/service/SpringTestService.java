@@ -198,4 +198,22 @@ public class SpringTestService {
         return articleList;
         
     }
+
+    public int dummy(int... value){
+        int result = 0;
+        for (int v : value) {
+            result += v;
+        }
+
+        return result;
+    }
+
+    public int privateDummy(int... value){
+        int result = 0;
+        for (int v : value) {
+            result += v;
+        }
+
+        return result;
+    }
 }
