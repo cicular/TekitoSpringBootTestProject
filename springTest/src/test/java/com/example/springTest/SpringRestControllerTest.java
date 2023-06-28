@@ -1,8 +1,8 @@
 package com.example.springTest;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.springTest.controller.SpringRestController;
@@ -30,6 +29,7 @@ public class SpringRestControllerTest {
     SpringRestController springRestController;
 
     @Mock
+    // Mockitoから提供されるアノテーション
     // 「まだ実装が完了していないクラス」に対して、このアノテーションを付与します。
     SpringTestService springTestService;
 
@@ -48,7 +48,16 @@ public class SpringRestControllerTest {
             springRestController.bbb();
             System.out.println("テスト実行した");
 
-            verify(springTestService,times(1)).getArticles("あ", true);    
+            verify(springTestService,times(1)).getArticles("あ", true);
+            // 下記はエラーになる。org.mockito.exceptions.misusing.InvalidUseOfMatchersException: Invalid use of argument matchers!
+            // When using matchers, all arguments have to be provided by matchers.
+            // verify(springTestService,times(1)).getArticles(Mockito.any(), true);
+            // verify(springTestService,times(1)).getArticles(Mockito.anyString(), true);
+
+            // 下記のように、すべての引数をmatchers形式にする必要がある
+            verify(springTestService,times(1)).getArticles(Mockito.any(), eq(true));
+            verify(springTestService,times(1)).getArticles(Mockito.anyString(), eq(true));
+
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
