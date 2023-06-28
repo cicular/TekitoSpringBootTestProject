@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,8 @@ public class SpringTestService {
     Logger logger = LoggerFactory.getLogger(SpringTestService.class);
     
     public List<Articles> getArticles(String searchWordArticle, boolean flg) throws Exception{
+
+        System.out.println("モックじゃありません。");
         String[] wordArray = searchWordArticle.split("　");
 
         List<Articles> articleListTitle = new ArrayList<Articles>();
@@ -188,7 +191,7 @@ public class SpringTestService {
 
         try{
             articleList = articlesMapper.selectByExample(articleExample);
-        }catch(Exception e){
+        }catch(Throwable e){
             e.printStackTrace();
             logger.error("getSameDayArticlesでエラー発生");
             logger.error(e.toString());
