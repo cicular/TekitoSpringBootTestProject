@@ -111,7 +111,7 @@ public class SpringRestController {
         try{
             resultList = springService1.getArticles("あ", true);
             System.out.println(resultList.size());
-            resultList = springService1.getArticles2("あ", true);
+            // resultList = springService1.getArticles2("あ", true);
         }catch(Exception e){
             // return "error";
         }
