@@ -10,21 +10,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+// import com.example.kinpy.dto.*;
+import com.peechan.enums.Message;
 
-import com.example.springTest.dto.Message;
+import com.example.springTest.dto.RestMessage;
 import com.example.springTest.mapper.ArticlesMapper;
 import com.example.springTest.mapper.ArticlesMapperExtends;
 import com.example.springTest.mapper.CommentsMapper;
 import com.example.springTest.mapper.CommentsMapperExtends;
 import com.example.springTest.model.Articles;
-import com.example.springTest.service.SpringTestService;
+import com.example.springTest.service.SpringService1;
+import com.example.springTest.service.SpringService2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.servlet.http.HttpServletResponse;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,21 +50,30 @@ public class SpringRestController {
     CommentsMapperExtends commentsMapperExtends;
 
     @Autowired
-    SpringTestService springTestService;
+    SpringService1 springService1;
 
     @Autowired
-    // @Qualifier("bean1")
+    SpringService2 springService2;
+
+    @Autowired
+    @Qualifier("bean1")
     long numOfArticles;
 
     @Value("${dirpath.list}")
     String dirPath;
 
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("application");
+
+    private static ResourceBundle msgBundle = ResourceBundle.getBundle("message");
+
     @PostMapping(value = "/aaa")
     // public String searchArticles(@RequestBody @Validated Message message) {
     // application/jsonとしてパラメーターを受け取る場合は、DTO に@RequestBodyを付与
-    public long aaa(@Validated @RequestBody Message message) {
+    public long aaa(@Validated @RequestBody RestMessage message) {
 
         System.out.println(numOfArticles);
+
+        System.out.println(msgBundle.getString("test"));
 
         long startTime = System.currentTimeMillis();
         
@@ -71,7 +82,7 @@ public class SpringRestController {
         List<Articles> resultList = new ArrayList<Articles>();
 
         try{
-            resultList = springTestService.getArticles("あ", true);
+            resultList = springService1.getArticles("あ", true);
         }catch(Exception e){
             return 0L;
         }
@@ -91,47 +102,44 @@ public class SpringRestController {
         long startTime = System.currentTimeMillis();
         
         logger.info("access POST /bbb");
+        System.out.println(resourceBundle.getString("dirpath.list"));
+
+        sample0();
 
         List<Articles> resultList = new ArrayList<Articles>();
 
         try{
-            resultList = springTestService.getArticles("あ", true);
+            resultList = springService1.getArticles("あ", true);
+            System.out.println(resultList.size());
+            resultList = springService1.getArticles2("あ", true);
         }catch(Exception e){
             // return "error";
         }
+
+        System.out.println(Message.MSG_001.getCode());
 
         long endTime = System.currentTimeMillis();
         logger.info("bbb 件数：{}", resultList.size());
         logger.info("bbb 処理時間：" + (endTime - startTime) + "ms");
 
         return new ResponseEntity<>(HttpStatus.OK);
-        // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
-        // return null;
-        // throw(new Exception());
-
     }
 
     @PostMapping(value = "/sample")
     // public ResponseEntity<Void> sample(@RequestBody Message message) {
     public ResponseEntity<Void> sample(@RequestBody String message) throws Exception {        
-        System.out.println(message);
 
-        // ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        // String jsonAsString;
-        // try {
-        //     jsonAsString = objectMapper.writeValueAsString(message1);                    
-        //     System.out.println(jsonAsString);
-        // } catch (JsonProcessingException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
-        // }
+        String jsonAsString;
+        try {
+            jsonAsString = objectMapper.writeValueAsString(message);                    
+            System.out.println(jsonAsString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
-        throw new Exception();
-        // return null;
-
-        // return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/sample2")
@@ -152,4 +160,17 @@ public class SpringRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    public int sample0(){
+        System.out.println("sample0 モックではない");
+        return 0;
+    }
+
+    @PostMapping(value = "/validate")
+    public ResponseEntity<Void> validate() {        
+
+        // int result = springService2.validate();
+        // System.out.println("結果は" + result);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

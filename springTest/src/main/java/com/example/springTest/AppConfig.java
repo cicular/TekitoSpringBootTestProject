@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.springTest.mapper.ArticlesMapper;
 import com.example.springTest.model.Articles;
@@ -16,6 +17,11 @@ public class AppConfig {
 
     @Autowired
     ArticlesMapper articlesMapper;
+
+    @Bean
+    public RestTemplate configMethod000(){
+        return new RestTemplate();
+    }
     
     @Bean
     public long configMethod0(){
