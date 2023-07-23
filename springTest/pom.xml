@@ -110,12 +110,15 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<!-- <resources>
+		<resources>
 			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
+				 <directory>src/main/resources</directory>
+            	<filtering>true</filtering>
+            	<!-- <excludes>
+                	<exclude>**/application.properties</exclude>
+            	</excludes> -->
 			</resource>
-    	</resources> -->
+    	</resources>
 	</build>
 
 </project>
