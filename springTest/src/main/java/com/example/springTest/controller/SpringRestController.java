@@ -173,4 +173,15 @@ public class SpringRestController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping(value = "/fff")
+    // public String searchArticles(@RequestBody @Validated Message message) {
+    // application/jsonとしてパラメーターを受け取る場合は、DTO に@RequestBodyを付与
+    public ResponseEntity<Void> fff(@Validated @RequestBody RestMessage message) {
+
+        System.out.println("access POST /fff");
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+
+    }
 }
