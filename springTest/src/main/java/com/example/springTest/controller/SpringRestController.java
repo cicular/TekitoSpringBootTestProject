@@ -24,18 +24,23 @@ import com.example.springTest.service.SpringService2;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager; // ★
+import org.apache.logging.log4j.Logger;     // ★
 
 @RestController
 @RequestMapping(value = "/spring")
 public class SpringRestController {
 
-    Logger logger = LoggerFactory.getLogger(SpringRestController.class);
+    // Logger logger = LoggerFactory.getLogger(SpringRestController.class);
+    private static Logger logger = LogManager.getLogger(SpringRestController.class);
 
     @Autowired
     ArticlesMapper articlesMapper;
@@ -70,6 +75,11 @@ public class SpringRestController {
     // public String searchArticles(@RequestBody @Validated Message message) {
     // application/jsonとしてパラメーターを受け取る場合は、DTO に@RequestBodyを付与
     public long aaa(@Validated @RequestBody RestMessage message) {
+
+        logger.info("start aaa()"); // ★ 
+
+        File directory = new File("C:\\Users\\circu\\PycharmProjects\\SpringPracticeProject\\springTest\\logs");
+        System.out.println("Is writable: " + directory.canWrite());
 
         System.out.println(numOfArticles);
 
@@ -180,6 +190,17 @@ public class SpringRestController {
     public ResponseEntity<Void> fff(@Validated @RequestBody RestMessage message) {
 
         System.out.println("access POST /fff");
+
+        Articles articles = new Articles(){{
+            setArticleTitle("タイトル");
+        }};
+
+        try{
+            articlesMapper.insertSelective(articles);
+        }catch(Exception e){
+            String errorCode = ((SQLException)e.getCause()).getSQLState();
+            System.out.println(errorCode);
+        }
 
         return new ResponseEntity<Void>(HttpStatus.OK);
 
