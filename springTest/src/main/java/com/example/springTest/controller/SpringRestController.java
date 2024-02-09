@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.peechan.enums.Message;
 
 import com.example.springTest.dto.RestMessage;
-import com.example.springTest.mapper.ArticlesMapper;
-import com.example.springTest.mapper.ArticlesMapperExtends;
-import com.example.springTest.mapper.CommentsMapper;
-import com.example.springTest.mapper.CommentsMapperExtends;
-import com.example.springTest.model.Articles;
+import com.example.mapper.ArticlesMapper;
+import com.example.mapper.CommentsMapper;
+import com.example.model.Articles;
 import com.example.springTest.service.SpringService1;
 import com.example.springTest.service.SpringService2;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,13 +44,7 @@ public class SpringRestController {
     ArticlesMapper articlesMapper;
 
     @Autowired
-    ArticlesMapperExtends articlesMapperExtends;
-
-    @Autowired
     CommentsMapper commentsMapper;
-
-    @Autowired
-    CommentsMapperExtends commentsMapperExtends;
 
     @Autowired
     SpringService1 springService1;

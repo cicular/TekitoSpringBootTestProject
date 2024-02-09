@@ -2,17 +2,27 @@ package com.example.springTest;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.springTest.mapper.ArticlesMapper;
-import com.example.springTest.model.Articles;
-import com.example.springTest.model.ArticlesExample;
+import com.example.mapper.ArticlesMapper;
+import com.example.model.Articles;
+import com.example.model.ArticlesExample;
 
 @Configuration
+// mybatis-spring-boot-starterを使ってMyBatisを利用する場合、
+// アプリケーション起動時に@Mapperが付与されているインターフェースが自動的にスキャンされ、Mapperとして登録される。
+// しかしマッパーが他モジュール（jar）内の場合はスキャンされないため、@MapperScanが必要。
+@MapperScan("com.example.mapper")
+@MapperScan("com.example.kinpy.mapper")
 public class AppConfig {
 
     @Autowired
@@ -66,4 +76,16 @@ public class AppConfig {
         return 2L;
     }
 
+    // @Bean
+	// public DataSource dataSource() {
+    //     System.out.println("dataSource");
+	// 	return new TransactionAwareDataSourceProxy(
+	// 		DataSourceBuilder
+	// 		.create()
+	// 		.username("postgres")
+	// 		.password("postgres")
+	// 		.url("jdbc:postgresql://localhost:5432/postgres")
+	// 		.driverClassName("org.postgresql.Driver")
+	// 		.build());
+	// }
 }

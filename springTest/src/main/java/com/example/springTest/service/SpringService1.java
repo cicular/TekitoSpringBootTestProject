@@ -10,11 +10,10 @@ import java.util.Comparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.springTest.mapper.ArticlesMapper;
-import com.example.springTest.mapper.ArticlesMapperExtends;
-import com.example.springTest.mapper.CommentsMapper;
-import com.example.springTest.model.Articles;
-import com.example.springTest.model.ArticlesExample;
+import com.example.mapper.ArticlesMapper;
+import com.example.mapper.CommentsMapper;
+import com.example.model.Articles;
+import com.example.model.ArticlesExample;
 
 // import org.slf4j.Logger;
 // import org.slf4j.LoggerFactory;
@@ -26,9 +25,6 @@ public class SpringService1 {
 
     @Autowired
     ArticlesMapper articlesMapper;
-
-    @Autowired
-    ArticlesMapperExtends articlesMapperExtends;
 
     @Autowired
     CommentsMapper commentsMapper;

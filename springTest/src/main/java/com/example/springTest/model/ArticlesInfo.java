@@ -2,6 +2,8 @@ package com.example.springTest.model;
 
 import java.util.Date;
 
+import com.example.model.Articles;
+
 public class ArticlesInfo extends Articles{
     
     private String commentsContent;
