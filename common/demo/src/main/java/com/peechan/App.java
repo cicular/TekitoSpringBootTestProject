@@ -12,6 +12,6 @@ public class App
     {
         System.out.println( "Hello World!" );
         CallWebApi callWebApi = new CallWebApi();
-        callWebApi.callWebApiSample();
+        // callWebApi.callWebApiSample();TODO
     }
 }
