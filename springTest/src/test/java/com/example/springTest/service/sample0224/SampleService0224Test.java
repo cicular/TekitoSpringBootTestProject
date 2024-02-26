@@ -2,6 +2,7 @@ package com.example.springTest.service.sample0224;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -9,12 +10,17 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
@@ -24,6 +30,7 @@ import com.example.springTest.TestUtil;
 public class SampleService0224Test extends TestUtil{
     
     @SpyBean
+    // @Autowired
     SampleService0224 sampleService0224;
 
     @Test
@@ -116,5 +123,70 @@ public class SampleService0224Test extends TestUtil{
         System.out.println(result);
         assertEquals("モックだよ", result);
         mocked.close();
+    }
+
+    @Test
+    public void testMethod7WithMockedReadAllBytes() throws IOException {
+        
+        // sampleService0224.method7();
+
+        try (MockedStatic<Files> mockedFiles = Mockito.mockStatic(Files.class)) {
+            // mockedFiles.when(() -> Files.readAllBytes(any(Path.class))).thenReturn(new byte[0]);
+            mockedFiles.when(() -> Files.readAllBytes(any(Path.class)))
+                    .thenAnswer(invocation -> {
+                        // カウンターをインクリメント
+                        Counter.increaseCount();
+                        // 10回目の呼び出し時にIOExceptionをスロー
+                        if (Counter.getCount() == 10) {
+                            throw new IOException("Mocked IOException");
+                        }
+                        return new byte[0]; // 他の呼び出しでは空のバイト配列を返す
+                    });
+
+            SampleService0224 service = new SampleService0224();
+            service.method7();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testMethod7WithMockedReadAllBytes2() throws IOException {
+
+        MockedStatic<Files> mockedFiles = Mockito.mockStatic(Files.class);
+            // mockedFiles.when(() -> Files.readAllBytes(any(Path.class))).thenReturn(new byte[0]);
+        mockedFiles.when(() -> Files.readAllBytes(any(Path.class)))
+                .thenAnswer(invocation -> {
+                    // カウンターをインクリメント
+                    Counter.increaseCount();
+                    // 10回目の呼び出し時にIOExceptionをスロー
+                    if (Counter.getCount() == 10) {
+                        throw new IOException("Mocked IOException");
+                    }
+                    return new byte[0]; // 他の呼び出しでは空のバイト配列を返す
+                });
+
+        SampleService0224 service = new SampleService0224();
+        service.method7();
+
+        mockedFiles.close();
+
+    }
+
+    // 呼び出し回数を追跡するためのヘルパークラス
+    static class Counter {
+        private static int count = 0;
+
+        public static void increaseCount() {
+            count++;
+        }
+
+        public static int getCount() {
+            return count;
+        }
+
+        public static void resetCount() {
+            count = 0;
+        }
     }
 }

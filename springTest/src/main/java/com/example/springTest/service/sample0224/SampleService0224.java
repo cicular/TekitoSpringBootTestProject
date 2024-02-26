@@ -1,5 +1,13 @@
 package com.example.springTest.service.sample0224;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +56,19 @@ public class SampleService0224 {
     public static String method6(){
         System.out.println("method5 モックではないよ");
         return "method5 モックではないよ";
+    }
+
+    public void method7(){
+        Path dirPath = Paths.get("C:\\Users\\circu\\Downloads\\01");
+        try (Stream<Path> stream = Files.list(dirPath)) {
+            stream.forEach(path -> System.out.println(path.getFileName()));
+
+            List<Path> fileList = Files.list(dirPath).collect(Collectors.toList());
+            for (Path file : fileList){
+                Files.readAllBytes(file);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
